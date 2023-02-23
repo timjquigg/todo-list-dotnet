@@ -21,7 +21,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "server": "dotnet run --project server/todo-dotnet-api.csproj --launch-profile https",
+    "server": "dotnet run --project server/todo-dotnet-api.csproj",
     "dev": "run-p start server"
   },
   "eslintConfig": {
@@ -42,7 +42,7 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://localhost:7222",
+  "proxy": "http://localhost:5265",
   "devDependencies": {
     "npm-run-all": "^4.1.5"
   }
