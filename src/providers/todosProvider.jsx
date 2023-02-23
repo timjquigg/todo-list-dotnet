@@ -17,8 +17,13 @@ export default function TodosProvider(props) {
   };
 
   const createTodo = async (todo) => {
-    const res = await axios.post("/api/TodoItems");
-    //
+    const res = await axios.post("/api/TodoItems", todo);
+    console.log(res.data);
+    setTodos((prev) => {
+      const newTodos = [...prev];
+      newTodos.push(res.data);
+      return newTodos;
+    });
   };
 
   const updateTodo = async ({ id, description, isComplete }) => {

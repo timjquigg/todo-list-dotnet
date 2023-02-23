@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -11,10 +11,9 @@ import { todosContext } from "../providers/todosProvider";
 
 export default function EditTodo(props) {
   const { open, setOpen, todo } = props;
-  const [description, setDescription] = useState(todo.description);
-  // const [complete, setComplete] = useState(todo.isComplete);
-
-  const { updateTodo } = useContext(todosContext);
+  const [description, setDescription] = useState(todo.description ?? "");
+  const elementId = `editTodo${todo.id ?? ""}`;
+  const { updateTodo, createTodo } = useContext(todosContext);
 
   const handleClose = () => {
     setOpen(false);
@@ -31,7 +30,11 @@ export default function EditTodo(props) {
 
   const handleSave = () => {
     handleClose();
-    updateTodo({ description, id: todo.id, iscomplete: todo.iscomplete });
+    if (todo.id) {
+      updateTodo({ description, id: todo.id, isComplete: todo.isComplete });
+      return;
+    }
+    createTodo({ description, isComplete: todo.isComplete });
   };
 
   return (
@@ -41,6 +44,8 @@ export default function EditTodo(props) {
       </DialogTitle>
       <DialogContent>
         <TextField
+          id={elementId}
+          autoFocus
           fullWidth
           value={description}
           onChange={(e) => handleEdit(e.target.value)}

@@ -6,6 +6,7 @@ let theme = createTheme({
       styleOverrides: {
         root: {
           border: "none",
+          padding: "0.25rem",
         },
       },
     },
