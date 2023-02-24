@@ -12,13 +12,11 @@ export default function TodosProvider(props) {
 
   const getAllTodos = async () => {
     const res = await axios.get(`/api/TodoItems`);
-    console.log(res.data);
     setTodos(res.data);
   };
 
   const createTodo = async (todo) => {
     const res = await axios.post("/api/TodoItems", todo);
-    console.log(res.data);
     setTodos((prev) => {
       const newTodos = [...prev];
       newTodos.push(res.data);
@@ -28,18 +26,21 @@ export default function TodosProvider(props) {
 
   const updateTodo = async ({ id, description, isComplete }) => {
     const todo = { id, description, isComplete };
-    await axios.put(`/api/TodoItems/${todo.id}`, todo);
+    const res = await axios.put(`/api/TodoItems/${todo.id}`, todo);
     setTodos((prev) => {
       const newTodos = [...prev];
       const index = newTodos.findIndex((todo) => todo.id === id);
-      newTodos[index].description = description;
-      newTodos[index].isComplete = isComplete;
+      newTodos[index] = res.data;
       return newTodos;
     });
   };
 
   const deleteTodo = async (id) => {
     const res = await axios.delete(`/api/TodoItems/${id}`);
+    setTodos((prev) => {
+      const newTodos = prev.filter((el) => el.id !== id);
+      return newTodos;
+    });
   };
 
   const providerData = { todos, createTodo, updateTodo, deleteTodo };

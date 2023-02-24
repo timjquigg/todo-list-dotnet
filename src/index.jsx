@@ -9,8 +9,8 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   // <React.StrictMode>
   <>
-    <CssBaseline enableColorScheme />
     <ThemeProvider theme={theme}>
+      <CssBaseline enableColorScheme />
       <App />
     </ThemeProvider>
   </>

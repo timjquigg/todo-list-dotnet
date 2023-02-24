@@ -1,17 +1,13 @@
 import { Paper } from "@mui/material";
-import { Box, Container } from "@mui/system";
+import { Container } from "@mui/system";
 import Banner from "./components/banner";
 import TodoList from "./components/todoList";
 import useWindowDimensions from "./hooks/useWindowDimensions";
+import SnackbarProvider from "./providers/snackbarProvider";
 import TodosProvider from "./providers/todosProvider";
 
 function App() {
-  const { bannerHeight, bodyHeight } = useWindowDimensions();
-
-  // const bodyHeight =
-  //   windowdimensions.height -
-  //   bannerHeight -
-  //   6 * parseFloat(getComputedStyle(document.documentElement).fontSize);
+  const { bodyHeight } = useWindowDimensions();
 
   return (
     <Container
@@ -20,13 +16,19 @@ function App() {
     >
       <Paper
         id="banner"
+        elevation={4}
         sx={{ textAlign: "center", height: "auto", mt: "2rem", p: 0 }}
       >
         <Banner />
       </Paper>
-      <Paper sx={{ textAlign: "center", height: bodyHeight, my: "2rem" }}>
+      <Paper
+        elevation={8}
+        sx={{ textAlign: "center", height: bodyHeight, my: "2rem" }}
+      >
         <TodosProvider>
-          <TodoList />
+          <SnackbarProvider>
+            <TodoList />
+          </SnackbarProvider>
         </TodosProvider>
       </Paper>
     </Container>

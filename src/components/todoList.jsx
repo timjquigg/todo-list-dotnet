@@ -7,16 +7,19 @@ import {
   TableRow,
   TableCell,
   TableHead,
+  Snackbar,
 } from "@mui/material";
 import { Add } from "@mui/icons-material";
 import TodoListItem from "./todoListItem";
 import { useContext, useState } from "react";
 import { todosContext } from "../providers/todosProvider";
 import EditTodo from "./editTodo";
+import FeedbackMessage from "./feedbackMessage";
 
 export default function TodoList(props) {
   const { todos } = useContext(todosContext);
   const [open, setOpen] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   let incompleteTodoList = [];
   let completedTodoList = [];
@@ -108,6 +111,7 @@ export default function TodoList(props) {
         setOpen={setOpen}
         todo={{ id: null, description: "", completed: false }}
       />
+      <FeedbackMessage />
     </Box>
   );
 }
