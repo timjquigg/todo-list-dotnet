@@ -35,12 +35,13 @@ export default function EditTodo(props) {
       return;
     }
     createTodo({ description, isComplete: todo.isComplete });
+    setDescription(todo.description ?? "");
   };
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="xs" fullWidth={true}>
       <DialogTitle color="primary" textAlign="center">
-        Edit Todo
+        {todo.id ? "Edit Todo" : "Create Todo"}
       </DialogTitle>
       <DialogContent>
         <TextField

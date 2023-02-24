@@ -59,7 +59,29 @@ namespace todo_dotnet_api.Controllers
         return BadRequest();
       }
 
-      _context.Entry(todoItem).State = EntityState.Modified;
+      var todo = await _context.TodoItems.FindAsync(id);
+
+      if (todo == null)
+      {
+        return NotFound();
+      }
+
+      var entry = _context.Entry(todo);
+
+      todo.Description = todoItem.Description;
+
+      if (todo.IsComplete == false && todoItem.IsComplete == true)
+      {
+        todo.DateCompleted = DateTime.UtcNow;
+      }
+
+      if (todoItem.IsComplete == false)
+      {
+        todo.DateCompleted = null;
+      }
+
+      todo.IsComplete = todoItem.IsComplete;
+      _context.Entry(todo).State = EntityState.Modified;
 
       try
       {
@@ -67,14 +89,8 @@ namespace todo_dotnet_api.Controllers
       }
       catch (DbUpdateConcurrencyException)
       {
-        if (!TodoItemExists(id))
-        {
-          return NotFound();
-        }
-        else
-        {
-          throw;
-        }
+
+        throw;
       }
 
       return NoContent();

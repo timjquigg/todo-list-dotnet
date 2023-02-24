@@ -6,6 +6,7 @@ import {
   Typography,
   TableRow,
   TableCell,
+  TableHead,
 } from "@mui/material";
 import { Add } from "@mui/icons-material";
 import TodoListItem from "./todoListItem";
@@ -22,12 +23,14 @@ export default function TodoList(props) {
   if (todos.length > 0) {
     incompleteTodoList = todos
       .filter((todo) => !todo.isComplete)
+      .sort((left, right) => left.id - right.id)
       .map((todo, index) => {
         return <TodoListItem todo={todo} key={index} />;
       });
 
     completedTodoList = todos
       .filter((todo) => todo.isComplete)
+      .sort((left, right) => left.id - right.id)
       .map((todo, index) => {
         return <TodoListItem todo={todo} key={index} />;
       });
@@ -45,6 +48,20 @@ export default function TodoList(props) {
         </Typography>
       )}
       <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell sx={{ width: 3 / 4 }}>
+              <Typography variant="h6" textAlign="left" color="primary">
+                Description
+              </Typography>
+            </TableCell>
+            <TableCell>
+              <Typography variant="h6" textAlign="center" color="primary">
+                Actions
+              </Typography>
+            </TableCell>
+          </TableRow>
+        </TableHead>
         <TableBody>
           {incompleteTodoList}
           <TableRow>
@@ -62,6 +79,25 @@ export default function TodoList(props) {
             Completed
           </Typography>
           <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell sx={{ width: 2 / 5 }}>
+                  <Typography variant="h6" textAlign="left" color="primary">
+                    Description
+                  </Typography>
+                </TableCell>
+                <TableCell sx={{ width: 1 / 5 }}>
+                  <Typography variant="h6" textAlign="center" color="primary">
+                    Actions
+                  </Typography>
+                </TableCell>
+                <TableCell sx={{ width: 2 / 5 }}>
+                  <Typography variant="h6" textAlign="center" color="primary">
+                    Completed
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            </TableHead>
             <TableBody>{completedTodoList}</TableBody>
           </Table>
         </>
