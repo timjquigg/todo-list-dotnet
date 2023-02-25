@@ -42,12 +42,12 @@ export default function TodoListItem(props) {
       description,
       isComplete: !isComplete,
     });
+
     setSnackPack((prev) => [
       ...prev,
       {
-        message: `${description} ${
-          !isComplete ? "marked complete" : "marked incomplete"
-        }`,
+        message: `${description} \
+         ${!isComplete ? "Marked Complete" : "Marked Incomplete"}`,
         key: new Date().getTime(),
       },
     ]);
@@ -59,7 +59,7 @@ export default function TodoListItem(props) {
     setSnackPack((prev) => [
       ...prev,
       {
-        message: `${description} deleted`,
+        message: `${description} - Deleted`,
         key: new Date().getTime(),
         todo: { id, description, isComplete, dateCompleted },
       },
@@ -69,7 +69,7 @@ export default function TodoListItem(props) {
   return (
     <>
       <TableRow>
-        <TableCell sx={{ width: 3 / 4 }}>
+        <TableCell sx={{ width: isComplete ? 2 / 5 : 2 / 5 }}>
           <Typography
             variant="body1"
             color="secondary.dark"
@@ -78,15 +78,34 @@ export default function TodoListItem(props) {
             {description}
           </Typography>
         </TableCell>
-        <TableCell size="string" colSpan={1}>
+        {isComplete && (
+          <TableCell>
+            <Typography
+              variant="body1"
+              textAlign="center"
+              color="secondary.dark"
+            >
+              {dateCompleted &&
+                formatDistanceToNow(new Date(dateCompleted), {
+                  addSuffix: true,
+                })}
+            </Typography>
+          </TableCell>
+        )}
+        <TableCell size="string" sx={{ alignContent: "flex-end" }}>
           <ButtonGroup>
-            {!isComplete && (
-              <Tooltip title="Edit">
-                <IconButton onClick={handleOpen}>
-                  <Edit color="secondary" />
-                </IconButton>
-              </Tooltip>
-            )}
+            <Tooltip title={!isComplete ? "Edit" : ""}>
+              <IconButton onClick={handleOpen} disabled={isComplete} hidden>
+                <Edit
+                  sx={{
+                    color: (theme) =>
+                      isComplete
+                        ? theme.palette.background.paper
+                        : theme.palette.secondary.main,
+                  }}
+                />
+              </IconButton>
+            </Tooltip>
             <Tooltip title="Delete">
               <IconButton size="string" onClick={handleDelete}>
                 <Delete color="secondary" />
@@ -103,20 +122,6 @@ export default function TodoListItem(props) {
             </Tooltip>
           </ButtonGroup>
         </TableCell>
-        {isComplete && (
-          <TableCell>
-            <Typography
-              variant="body1"
-              textAlign="center"
-              color="secondary.dark"
-            >
-              {dateCompleted &&
-                formatDistanceToNow(new Date(dateCompleted), {
-                  addSuffix: true,
-                })}
-            </Typography>
-          </TableCell>
-        )}
       </TableRow>
       <EditTodo open={open} setOpen={setOpen} todo={props.todo} />
     </>

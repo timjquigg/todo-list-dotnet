@@ -53,7 +53,7 @@ export default function FeedbackMessage(props) {
     <Snackbar
       key={snackbarContent ? snackbarContent.key : undefined}
       open={snackbarOpen}
-      autoHideDuration={6000}
+      autoHideDuration={3000}
       onClose={handleClose}
       TransitionProps={{ onExited: handleExited }}
       message={snackbarContent ? snackbarContent.message : undefined}
@@ -64,6 +64,7 @@ export default function FeedbackMessage(props) {
           </>
         )
       }
+      sx={{ maxWidth: "200px" }}
     />
   );
 }

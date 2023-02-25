@@ -16,6 +16,7 @@ export default function EditTodo(props) {
   const { updateTodo, createTodo } = useContext(todosContext);
 
   const handleClose = () => {
+    setDescription(todo.description ?? "");
     setOpen(false);
   };
 
@@ -46,17 +47,28 @@ export default function EditTodo(props) {
       <DialogContent>
         <TextField
           id={elementId}
+          color="secondary"
           autoFocus
+          multiline
           fullWidth
+          variant="filled"
           value={description}
           onChange={(e) => handleEdit(e.target.value)}
         />
       </DialogContent>
       <DialogActions>
-        <Button color="error" onClick={handleCancel}>
+        {/* <Button color="secondary" onClick={handleCancel}> */}
+        <Button
+          onClick={handleCancel}
+          sx={{ color: (theme) => theme.palette.secondary.main }}
+        >
           Cancel
         </Button>
-        <Button color="success" onClick={handleSave}>
+        {/* <Button color="primary" onClick={handleSave}> */}
+        <Button
+          onClick={handleSave}
+          sx={{ color: (theme) => theme.palette.primary.dark }}
+        >
           Save
         </Button>
       </DialogActions>

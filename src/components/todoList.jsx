@@ -8,6 +8,7 @@ import {
   TableCell,
   TableHead,
   Snackbar,
+  Tooltip,
 } from "@mui/material";
 import { Add } from "@mui/icons-material";
 import TodoListItem from "./todoListItem";
@@ -53,12 +54,12 @@ export default function TodoList(props) {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell sx={{ width: 3 / 4 }}>
+            <TableCell sx={{ width: 7 / 10 }}>
               <Typography variant="h6" textAlign="left" color="primary">
                 Description
               </Typography>
             </TableCell>
-            <TableCell>
+            <TableCell SX={{ width: 3 / 10 }}>
               <Typography variant="h6" textAlign="center" color="primary">
                 Actions
               </Typography>
@@ -69,9 +70,11 @@ export default function TodoList(props) {
           {incompleteTodoList}
           <TableRow>
             <TableCell>
-              <IconButton onClick={handleAdd}>
-                <Add color="primary" />
-              </IconButton>
+              <Tooltip title="Add">
+                <IconButton onClick={handleAdd}>
+                  <Add sx={{ color: (theme) => theme.palette.primary.main }} />
+                </IconButton>
+              </Tooltip>
             </TableCell>
           </TableRow>
         </TableBody>
@@ -89,14 +92,14 @@ export default function TodoList(props) {
                     Description
                   </Typography>
                 </TableCell>
-                <TableCell sx={{ width: 1 / 5 }}>
-                  <Typography variant="h6" textAlign="center" color="primary">
-                    Actions
-                  </Typography>
-                </TableCell>
-                <TableCell sx={{ width: 2 / 5 }}>
+                <TableCell sx={{ width: 3 / 10 }}>
                   <Typography variant="h6" textAlign="center" color="primary">
                     Completed
+                  </Typography>
+                </TableCell>
+                <TableCell sx={{ width: 3 / 10 }}>
+                  <Typography variant="h6" textAlign="center" color="primary">
+                    Actions
                   </Typography>
                 </TableCell>
               </TableRow>
