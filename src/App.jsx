@@ -23,7 +23,7 @@ function App() {
       </Paper>
       <Paper
         elevation={8}
-        sx={{ textAlign: "center", height: bodyHeight, my: "2rem" }}
+        sx={{ textAlign: "center", minHeight: bodyHeight, my: "2rem" }}
       >
         <TodosProvider>
           <SnackbarProvider>

@@ -1,18 +1,23 @@
 import { createTheme, responsiveFontSizes } from "@mui/material/styles";
 
+const mode = "light";
+
 let theme = createTheme({
   palette: {
-    mode: "light",
-    primary: {
-      main: "#658EA9",
-    },
-    secondary: {
-      main: "#E98973",
-    },
-    background: {
-      default: "#88B2CC",
-      paper: "#E7D4C0",
-    },
+    mode,
+    ...(mode === "light" && {
+      primary: {
+        main: "#658EA9",
+      },
+      secondary: {
+        main: "#E98973",
+      },
+      background: {
+        default: "#88B2CC",
+        paper: "#E7D4C0",
+      },
+    }),
+    // Add dark theme below
   },
   components: {
     MuiTableCell: {

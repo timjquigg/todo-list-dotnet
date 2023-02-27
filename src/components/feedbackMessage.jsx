@@ -35,9 +35,6 @@ export default function FeedbackMessage(props) {
   ]);
 
   const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
     setSnackbarOpen(false);
   };
 
@@ -53,7 +50,7 @@ export default function FeedbackMessage(props) {
     <Snackbar
       key={snackbarContent ? snackbarContent.key : undefined}
       open={snackbarOpen}
-      autoHideDuration={3000}
+      autoHideDuration={4000}
       onClose={handleClose}
       TransitionProps={{ onExited: handleExited }}
       message={snackbarContent ? snackbarContent.message : undefined}
