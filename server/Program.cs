@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TodoApi.Models;
 
@@ -22,6 +23,20 @@ builder.Services.AddCors(options =>
     builder.WithOrigins("*");
   });
 });
+
+builder.Services
+  .AddIdentityCore<IdentityUser>(options =>
+  {
+    options.SignIn.RequireConfirmedAccount = false;
+    options.User.RequireUniqueEmail = true;
+    options.Password.RequireDigit = false;
+    options.Password.RequiredLength = 6;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = false;
+  })
+  .AddEntityFrameworkStores<TodoContext>();
+
 
 var app = builder.Build();
 
