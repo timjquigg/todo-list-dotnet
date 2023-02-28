@@ -12,8 +12,8 @@ using TodoApi.Models;
 namespace todo_dotnet_api.Migrations
 {
   [DbContext(typeof(MyDbContext))]
-  [Migration("20230227213546_RemoveUserName")]
-  partial class RemoveUserName
+  [Migration("20230228194137_UpdateUserType")]
+  partial class UpdateUserType
   {
     /// <inheritdoc />
     protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,6 +35,10 @@ namespace todo_dotnet_api.Migrations
 
             b.Property<string>("ConcurrencyStamp")
                       .IsConcurrencyToken()
+                      .HasColumnType("text");
+
+            b.Property<string>("Discriminator")
+                      .IsRequired()
                       .HasColumnType("text");
 
             b.Property<string>("Email")
@@ -87,6 +91,10 @@ namespace todo_dotnet_api.Migrations
                       .HasDatabaseName("UserNameIndex");
 
             b.ToTable("AspNetUsers", (string)null);
+
+            b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
+
+            b.UseTphMappingStrategy();
           });
 
       modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -167,14 +175,32 @@ namespace todo_dotnet_api.Migrations
                       .HasColumnType("timestamp with time zone");
 
             b.Property<string>("Description")
+                      .IsRequired()
                       .HasColumnType("text");
 
             b.Property<bool>("IsComplete")
                       .HasColumnType("boolean");
 
+            b.Property<string>("UserId")
+                      .IsRequired()
+                      .HasColumnType("text");
+
             b.HasKey("Id");
 
+            b.HasIndex("UserId");
+
             b.ToTable("TodoItems");
+          });
+
+      modelBuilder.Entity("TodoApi.Models.User", b =>
+          {
+            b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+            b.Property<string>("Password")
+                      .IsRequired()
+                      .HasColumnType("text");
+
+            b.HasDiscriminator().HasValue("User");
           });
 
       modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -202,6 +228,17 @@ namespace todo_dotnet_api.Migrations
                       .HasForeignKey("UserId")
                       .OnDelete(DeleteBehavior.Cascade)
                       .IsRequired();
+          });
+
+      modelBuilder.Entity("TodoApi.Models.TodoItem", b =>
+          {
+            b.HasOne("TodoApi.Models.User", "User")
+                      .WithMany()
+                      .HasForeignKey("UserId")
+                      .OnDelete(DeleteBehavior.Cascade)
+                      .IsRequired();
+
+            b.Navigation("User");
           });
 #pragma warning restore 612, 618
     }

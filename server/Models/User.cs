@@ -1,13 +1,24 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace TodoApi.Models
 {
-  public class User
+  public class User : IdentityUser
   {
-    public long Id { get; set; }
+    // public string Password { get; set; }
+    // public virtual ICollection<TodoItem>? Todos { get; set; }
+  }
+
+  public class LoginUser
+  {
     [Required]
-    public string? Email { get; set; }
+    [Display(Name = "Email")]
+    [DataType(DataType.EmailAddress)]
+    public string Email { get; set; }
+
     [Required]
-    public string? Password { get; set; }
+    [DataType(DataType.Password)]
+    [Display(Name = "Password")]
+    public string Password { get; set; }
   }
 }

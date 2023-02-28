@@ -7,14 +7,13 @@ namespace TodoApi.Models
     public long Id { get; set; }
 
     [Required]
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     [Required]
     public bool IsComplete { get; set; }
 
     public DateTime? DateCompleted { get; set; }
 
-    [Required]
-    public User User { get; set; }
+    public virtual User? User { get; set; }
   }
 }
