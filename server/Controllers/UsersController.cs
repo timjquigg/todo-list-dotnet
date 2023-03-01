@@ -28,9 +28,9 @@ namespace todo_dotnet_api.Controllers
         return BadRequest(ModelState);
       }
 
+      User newUser = new User() { UserName = user.Email, Email = user.Email };
       var result = await _userManager.CreateAsync(
-        new User() { UserName = user.Email, Email = user.Email },
-        user.Password
+        newUser, user.Password
       );
 
       if (!result.Succeeded)
@@ -38,26 +38,27 @@ namespace todo_dotnet_api.Controllers
         return BadRequest(result.Errors);
       }
 
-      user.Password = null;
-      return CreatedAtAction("GetUser", new { email = user.Email }, user);
+      var token = _jwtService.CreateToken(newUser);
+
+      return Ok(token);
     }
 
     // GET: api/Users/username
-    [HttpGet("{email}")]
-    public async Task<ActionResult<User>> GetUser(string email)
-    {
-      User user = await _userManager.FindByEmailAsync(email);
+    // [HttpGet("{email}")]
+    // public async Task<ActionResult<User>> GetUser(string email)
+    // {
+    //   User user = await _userManager.FindByEmailAsync(email);
 
-      if (user == null)
-      {
-        return NotFound();
-      }
+    //   if (user == null)
+    //   {
+    //     return NotFound();
+    //   }
 
-      return new User
-      {
-        Email = user.Email
-      };
-    }
+    //   return new User
+    //   {
+    //     Email = user.Email
+    //   };
+    // }
 
     // POST: api/Users/BearerToken
     [HttpPost("BearerToken")]
@@ -86,6 +87,19 @@ namespace todo_dotnet_api.Controllers
 
       return Ok(token);
     }
+
+    // [HttpDelete("{email}")]
+    // public async Task<IActionResult> DeleteUser(string email)
+    // {
+    //   var user = await _userManager.FindByEmailAsync(email);
+    //   if (user == null)
+    //   {
+    //     return BadRequest("Invalid user");
+    //   }
+    //   await _userManager.DeleteAsync(user);
+
+    //   return NoContent();
+    // }
 
 
   }

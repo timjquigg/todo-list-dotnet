@@ -13,6 +13,14 @@ namespace TodoApi.Models
 
       modelBuilder.Entity<User>()
           .ToTable("Users");
+
+
+      modelBuilder.Entity<TodoItem>()
+        .HasOne(e => e.User)
+        .WithMany(e => e.Todos)
+        .OnDelete(DeleteBehavior.Cascade);
+
+
     }
     public DbSet<TodoItem> TodoItems { get; set; } = null!;
     public DbSet<User> User { get; set; } = null!;

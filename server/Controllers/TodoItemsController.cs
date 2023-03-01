@@ -139,6 +139,7 @@ namespace todo_dotnet_api.Controllers
 
       db.TodoItems.Add(todoItem);
       await db.SaveChangesAsync();
+      todoItem.User = null;
 
       return CreatedAtAction(nameof(GetTodoItem), new { id = todoItem.Id }, todoItem);
     }

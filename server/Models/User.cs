@@ -6,7 +6,7 @@ namespace TodoApi.Models
   public class User : IdentityUser
   {
     // public string Password { get; set; }
-    // public virtual ICollection<TodoItem>? Todos { get; set; }
+    public virtual ICollection<TodoItem>? Todos { get; set; }
   }
 
   public class LoginUser
