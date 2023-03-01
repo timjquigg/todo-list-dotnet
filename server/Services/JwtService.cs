@@ -1,6 +1,7 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -11,7 +12,7 @@ namespace TodoApi.Services
 {
   public class JwtService
   {
-    private const int EXPIRATION_MINUTES = 60;
+    // private const int EXPIRATION_MINUTES = 60;
     private readonly IConfiguration _configuration;
     public JwtService(IConfiguration configuration)
     {
@@ -20,7 +21,14 @@ namespace TodoApi.Services
 
     public AuthenticaionResponse CreateToken(User user)
     {
-      var expiration = DateTime.UtcNow.AddMinutes(EXPIRATION_MINUTES);
+
+      _ = int.TryParse(_configuration["JWT:TokenValidityInMinutes"], out int tokenValidityInMinutes);
+
+      var expiration = DateTime.UtcNow.AddMinutes(tokenValidityInMinutes);
+
+      _ = int.TryParse(_configuration["JWT:RefreshTokenValidityInDays"], out int refreshTokenValidityInDays);
+
+      var refreshTokenExpiration = DateTime.UtcNow.AddDays(refreshTokenValidityInDays);
 
       var token = CreateJwtToken(
         CreateClaims(user),
@@ -32,8 +40,9 @@ namespace TodoApi.Services
 
       return new AuthenticaionResponse
       {
-        Token = tokenHandler.WriteToken(token),
-        Expiration = expiration
+        AccessToken = tokenHandler.WriteToken(token),
+        RefreshToken = GenerateRefreshToken(),
+        RefreshTokenExpiryTime = refreshTokenExpiration
       };
     }
 
@@ -60,5 +69,13 @@ namespace TodoApi.Services
         ),
         SecurityAlgorithms.HmacSha256
       );
+
+    private static string GenerateRefreshToken()
+    {
+      var randomNumber = new byte[64];
+      using var rng = RandomNumberGenerator.Create();
+      rng.GetBytes(randomNumber);
+      return Convert.ToBase64String(randomNumber);
+    }
   }
 }

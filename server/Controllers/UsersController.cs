@@ -12,11 +12,13 @@ namespace todo_dotnet_api.Controllers
   {
     private readonly UserManager<User> _userManager;
     private readonly JwtService _jwtService;
+    private readonly IConfiguration _configuration;
 
-    public UsersController(UserManager<User> userManager, JwtService jwtService)
+    public UsersController(UserManager<User> userManager, JwtService jwtService, IConfiguration configuration)
     {
       _userManager = userManager;
       _jwtService = jwtService;
+      _configuration = configuration;
     }
 
     // POST: api/Users
@@ -60,10 +62,11 @@ namespace todo_dotnet_api.Controllers
     //   };
     // }
 
-    // POST: api/Users/BearerToken
-    [HttpPost("BearerToken")]
+    // POST: api/Users/login
+    [HttpPost("login")]
     public async Task<ActionResult<AuthenticaionResponse>> CreateBearerToken(AuthenticationRequest request)
     {
+
       if (!ModelState.IsValid)
       {
         return BadRequest("Bad Credentials");
@@ -84,6 +87,12 @@ namespace todo_dotnet_api.Controllers
       }
 
       var token = _jwtService.CreateToken(user);
+
+      user.RefreshToken = token.RefreshToken;
+      user.RefreshTokenExpiryTime = token.RefreshTokenExpiryTime;
+
+      await _userManager.UpdateAsync(user);
+
 
       return Ok(token);
     }
