@@ -13,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager configuration = builder.Configuration;
 
 
-var connectionString = configuration["DATABASE_URL"];
+var connectionString = configuration["DATABASE"];
 
 //retrieve port from environment variables
 var port = builder.Configuration["PORT"];
