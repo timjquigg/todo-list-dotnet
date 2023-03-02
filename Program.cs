@@ -14,7 +14,12 @@ ConfigurationManager configuration = builder.Configuration;
 
 
 var connectionString = configuration["DATABASE"];
-// var connectionString = configuration.GetConnectionString("TodoContext");
+
+//retrieve port from environment variables
+var port = builder.Configuration["PORT"];
+
+//set listening urls
+builder.WebHost.UseUrls($"http://*:{port};http://localhost:3000");
 
 // Add services to the container.
 
