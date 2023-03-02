@@ -6,7 +6,7 @@ cmd = "dotnet restore"
 
 
 [phases.build]
-cmds = 'dotnet publish --no-restore -c Release -o {}'
+cmd = 'dotnet publish --no-restore -c Release -o {}'
 
 [phases.start]
 cmd = './out'
