@@ -1,5 +1,4 @@
-[setup]
-providers = ["dotnet-sdk_7", "nodejs"]
+providers = ["dotnet-sdk_7"]
 
 [install]
 cmd = dotnet restore
