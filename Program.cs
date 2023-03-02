@@ -12,7 +12,9 @@ const string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager configuration = builder.Configuration;
 
-var connectionString = configuration.GetConnectionString("TodoContext");
+
+var connectionString = configuration["DATABASE_URL"];
+// var connectionString = configuration.GetConnectionString("TodoContext");
 
 // Add services to the container.
 
