@@ -4,8 +4,9 @@ nixPkgs=['dotnet-sdk_7','nodejs']
 [phases.install]
 cmd = "dotnet restore"
 
+
 [phases.build]
-cmd = 'dotnet publish --no-restore -c Release -o {}'
+cmds = ['dotnet ef database update', 'dotnet publish --no-restore -c Release -o {}']
 
 [phases.start]
 cmd = './out'
