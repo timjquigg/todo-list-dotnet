@@ -45,26 +45,9 @@ namespace todo_dotnet_api.Controllers
       return Ok(token);
     }
 
-    // GET: api/Users/username
-    // [HttpGet("{email}")]
-    // public async Task<ActionResult<User>> GetUser(string email)
-    // {
-    //   User user = await _userManager.FindByEmailAsync(email);
-
-    //   if (user == null)
-    //   {
-    //     return NotFound();
-    //   }
-
-    //   return new User
-    //   {
-    //     Email = user.Email
-    //   };
-    // }
-
     // POST: api/Users/login
     [HttpPost("login")]
-    public async Task<ActionResult<AuthenticaionResponse>> CreateBearerToken(AuthenticationRequest request)
+    public async Task<ActionResult<AuthenticationResponse>> CreateBearerToken(LoginUser request)
     {
 
       if (!ModelState.IsValid)
@@ -93,6 +76,9 @@ namespace todo_dotnet_api.Controllers
 
       await _userManager.UpdateAsync(user);
 
+      Response.Cookies.Append("X-Access-Token", token.AccessToken, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
+      Response.Cookies.Append("X-Email", user.Email, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
+      Response.Cookies.Append("X-Refresh-Token", user.RefreshToken, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
 
       return Ok(token);
     }
@@ -110,7 +96,50 @@ namespace todo_dotnet_api.Controllers
     //   return NoContent();
     // }
 
+    [HttpGet("Refresh")]
+    public async Task<IActionResult> RefreshToken()
+    {
+      if (!(Request.Cookies.TryGetValue("X-Email", out var email) && Request.Cookies.TryGetValue("X-Refresh-Token", out var refreshToken)))
+        return BadRequest();
 
+      var user = _userManager.Users.FirstOrDefault(i => i.Email == email && i.RefreshToken == refreshToken && i.RefreshTokenExpiryTime > DateTime.UtcNow);
+
+      if (user == null)
+        return BadRequest();
+
+      var token = _jwtService.CreateToken(user);
+
+      user.RefreshToken = token.RefreshToken;
+      user.RefreshTokenExpiryTime = token.RefreshTokenExpiryTime;
+
+      await _userManager.UpdateAsync(user);
+
+      Response.Cookies.Append("X-Access-Token", token.AccessToken, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
+      Response.Cookies.Append("X-Email", user.Email, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
+      Response.Cookies.Append("X-Refresh-Token", user.RefreshToken, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
+
+      return Ok(token);
+    }
+
+    [HttpPost("Revoke")]
+    public async Task<IActionResult> Revoke()
+    {
+      if (!(Request.Cookies.TryGetValue("X-Email", out var email)))
+        return BadRequest();
+
+      var user = _userManager.Users.FirstOrDefault(i => i.Email == email);
+
+      if (user == null)
+        return BadRequest();
+
+      user.RefreshToken = null;
+      await _userManager.UpdateAsync(user);
+
+      Response.Cookies.Delete("X-Access-Token");
+      Response.Cookies.Delete("X-Email");
+      Response.Cookies.Delete("X-Refresh-Token");
+      return NoContent();
+    }
   }
 
 

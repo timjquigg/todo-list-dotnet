@@ -19,7 +19,7 @@ namespace TodoApi.Services
       _configuration = configuration;
     }
 
-    public AuthenticaionResponse CreateToken(User user)
+    public AuthenticationResponse CreateToken(User user)
     {
 
       _ = int.TryParse(_configuration["JWT:TokenValidityInMinutes"], out int tokenValidityInMinutes);
@@ -38,7 +38,7 @@ namespace TodoApi.Services
 
       var tokenHandler = new JwtSecurityTokenHandler();
 
-      return new AuthenticaionResponse
+      return new AuthenticationResponse
       {
         AccessToken = tokenHandler.WriteToken(token),
         RefreshToken = GenerateRefreshToken(),

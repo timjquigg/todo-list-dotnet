@@ -5,8 +5,8 @@ namespace TodoApi.Models
   public class AuthenticationRequest
   {
     [Required]
-    public string Email { get; set; }
+    public string? AccessToken { get; set; }
     [Required]
-    public string Password { get; set; }
+    public string? RefreshToken { get; set; }
   }
 }

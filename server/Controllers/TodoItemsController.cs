@@ -12,6 +12,7 @@ using TodoApi.Models;
 
 namespace todo_dotnet_api.Controllers
 {
+  [Authorize]
   [Route("api/[controller]")]
   [ApiController]
   public class TodoItemsController : ControllerBase
@@ -26,7 +27,6 @@ namespace todo_dotnet_api.Controllers
     }
 
     // GET: api/TodoItems
-    [Authorize]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItems()
     {
