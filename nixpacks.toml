@@ -1,5 +1,5 @@
-providers = ["dotnet-sdk_7"]
 [phases.setup]
+nixpacks = ["dotnet-sdk_7"]
 
 
 [phases.install]
