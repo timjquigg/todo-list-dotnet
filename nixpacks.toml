@@ -1,5 +1,5 @@
 [phases.setup]
-nixPkgs=['nodejs']
+nixPkgs=['dotnet-sdk_7','nodejs']
 
 [phases.install]
 cmd = "dotnet restore"
