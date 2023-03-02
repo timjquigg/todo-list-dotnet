@@ -20,10 +20,10 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && mv build/ server/wwwroot && cd server && dotnet publish",
+    "build": "react-scripts build && mv ./build ./wwwroot",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "server": "dotnet run --project server/todo-dotnet-api.csproj",
+    "server": "dotnet run",
     "dev": "run-p start server"
   },
   "eslintConfig": {
