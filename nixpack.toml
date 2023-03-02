@@ -1,11 +1,11 @@
-[phase.setup]
+[setup]
 providers = ["dotnet-sdk_7", "nodejs"]
 
-[phase.install]
+[install]
 cmd = dotnet restore
 
-[phase.build]
+[build]
 dotnet publish --no-restore -c Release -o {}
 
-[phase.start]
+[start]
 ./out
