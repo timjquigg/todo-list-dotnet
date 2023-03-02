@@ -59,7 +59,7 @@ export default function TodoList(props) {
                 Description
               </Typography>
             </TableCell>
-            <TableCell SX={{ width: 3 / 10 }}>
+            <TableCell sx={{ width: 3 / 10 }}>
               <Typography variant="h6" textAlign="center" color="primary">
                 Actions
               </Typography>

@@ -1,19 +1,40 @@
-import { createContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import axios from "axios";
+import { userContext } from "./userProvider";
 
 export const todosContext = createContext();
 
 export default function TodosProvider(props) {
   const [todos, setTodos] = useState([]);
 
-  useEffect(() => {
-    getAllTodos();
-  }, []);
+  const { token } = useContext(userContext);
 
-  const getAllTodos = async () => {
-    const res = await axios.get(`/api/TodoItems`);
-    setTodos(res.data);
+  // const getAllTodos = useCallback(async () => {
+  //   const res = await axios.get(`/api/TodoItems`);
+  //   setTodos(res.data);
+  // }, []);
+
+  const getAllTodos = () => {
+    axios
+      .get("/api/TodoItems")
+      .then((res) => {
+        setTodos(res.data);
+      })
+      .catch((err) => {});
   };
+
+  useEffect(() => {
+    if (token) {
+      getAllTodos();
+    }
+  }, [token]);
 
   const createTodo = async (todo) => {
     const res = await axios.post("/api/TodoItems", todo);
@@ -43,7 +64,17 @@ export default function TodosProvider(props) {
     });
   };
 
-  const providerData = { todos, createTodo, updateTodo, deleteTodo };
+  const resetTodos = () => {
+    setTodos([]);
+  };
+
+  const providerData = {
+    todos,
+    createTodo,
+    updateTodo,
+    deleteTodo,
+    resetTodos,
+  };
 
   return (
     <todosContext.Provider value={providerData}>
