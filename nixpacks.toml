@@ -1,6 +1,9 @@
 [phases.setup]
 nixPkgs = ['dotnet-sdk_7', 'nodejs']
 
+[phases.install]
+cmd = 'npm ci'
+
 [phases.build]
 cmd = 'npm run build'
 
