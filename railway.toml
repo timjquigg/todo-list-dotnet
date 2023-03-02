@@ -1,10 +1,10 @@
 providers = ["dotnet-sdk_7"]
 
 [install]
-cmd = dotnet restore
+cmd = 'dotnet restore'
 
 [build]
-dotnet publish --no-restore -c Release -o {}
+cmd = 'dotnet publish --no-restore -c Release -o {}'
 
 [start]
-./out
+cmd = './out'
