@@ -4,15 +4,18 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import theme from "./providers/theme";
+import UserProvider from "./providers/userProvider";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   // <React.StrictMode>
   <>
-    <ThemeProvider theme={theme}>
-      <CssBaseline enableColorScheme />
-      <App />
-    </ThemeProvider>
+    <UserProvider>
+      <ThemeProvider theme={theme}>
+        <CssBaseline enableColorScheme />
+        <App />
+      </ThemeProvider>
+    </UserProvider>
   </>
   // </React.StrictMode>
 );
