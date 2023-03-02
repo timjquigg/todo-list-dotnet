@@ -1,0 +1,8 @@
+[phases.setup]
+nixPkgs = ['dotnet-sdk_7', 'nodejs']
+
+[phases.build]
+cmd = 'npm run build'
+
+[phases.start]
+cmd = 'dotnet server/bin/Debug/net7.0/publish/todo-dotnet-api.dll'
