@@ -1,7 +1,7 @@
 import { ThemeProvider } from "@emotion/react";
 import { useMediaQuery } from "@mui/material";
 import { createTheme, responsiveFontSizes } from "@mui/material/styles";
-import { createContext, useMemo, useState } from "react";
+import { createContext, useState } from "react";
 
 export const colorModeContext = createContext();
 

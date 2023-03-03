@@ -6,6 +6,7 @@ export const userContext = createContext();
 
 export default function UserProvider(props) {
   const [token, setToken] = useState("");
+  // const [errorMessage, setErrorMessage] = useState([]);
 
   useEffect(() => {
     refreshToken();
@@ -15,10 +16,14 @@ export default function UserProvider(props) {
     axios
       .get("/api/Users/Refresh")
       .then((res) => {
+        // setErrorMessage("");
         const decoded = jwt_decode(res.data.accessToken);
         setToken(res.data.accessToken);
       })
-      .catch((err) => {});
+      .catch((err) => {
+        // console.log(err);
+        // setErrorMessage(err.response.data);
+      });
   };
 
   const signUp = (email, password) => {
@@ -26,10 +31,18 @@ export default function UserProvider(props) {
       email,
       password,
     };
-    axios.post("/api/Users/", payload).then((res) => {
-      const decoded = jwt_decode(res.data.accessToken);
-      setToken(res.data.accessToken);
-    });
+    return axios
+      .post("/api/Users/", payload)
+      .then((res) => {
+        // setErrorMessage("");
+        const decoded = jwt_decode(res.data.accessToken);
+        setToken(res.data.accessToken);
+        return Promise.resolve();
+      })
+      .catch((err) => {
+        // setErrorMessage(err.response.data);
+        return Promise.reject(err.response.data);
+      });
   };
 
   const signIn = (email, password) => {
@@ -37,20 +50,35 @@ export default function UserProvider(props) {
       email,
       password,
     };
-    axios.post("/api/Users/Login", payload).then((res) => {
-      const decoded = jwt_decode(res.data.accessToken);
-      setToken(res.data.accessToken);
-    });
+    return axios
+      .post("/api/Users/Login", payload)
+      .then((res) => {
+        // setErrorMessage("");
+        const decoded = jwt_decode(res.data.accessToken);
+        setToken(res.data.accessToken);
+        return Promise.resolve();
+      })
+      .catch((err) => {
+        return Promise.reject([{ description: err.response.data }]);
+        // setErrorMessage(err.response.data)
+      });
   };
 
   const signOut = () => {
-    axios.post("/api/Users/Revoke").then((res) => {
-      setToken("");
-    });
+    axios
+      .post("/api/Users/Revoke")
+      .then((res) => {
+        // setErrorMessage("");
+        setToken("");
+      })
+      .catch((err) => {
+        //  setErrorMessage(err.response.data)
+      });
   };
 
   const providerData = {
     token,
+    // errorMessage,
     signUp,
     signIn,
     signOut,

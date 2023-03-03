@@ -108,13 +108,24 @@ namespace todo_dotnet_api.Controllers
     [HttpGet("Refresh")]
     public async Task<IActionResult> RefreshToken()
     {
-      if (!(Request.Cookies.TryGetValue("X-Email", out var email) && Request.Cookies.TryGetValue("X-Refresh-Token", out var refreshToken)))
-        return BadRequest();
+      bool requestEmail = Request.Cookies.TryGetValue("X-Email", out var email);
+      bool requestRefreshToken = Request.Cookies.TryGetValue("X-Refresh-Token", out var refreshToken);
+
+      if (!(requestEmail && requestRefreshToken))
+      {
+        List<string> errors = new List<string>();
+        if (!requestEmail)
+          errors.Add("No e-mail provided");
+        if (!requestRefreshToken)
+          errors.Add("No refresh token provided");
+        return BadRequest(errors);
+      }
+
 
       var user = _userManager.Users.FirstOrDefault(i => i.Email == email && i.RefreshToken == refreshToken && i.RefreshTokenExpiryTime > DateTime.UtcNow);
 
       if (user == null)
-        return BadRequest();
+        return BadRequest("Invalid email or refresh token provided");
 
       var token = _jwtService.CreateToken(user);
 

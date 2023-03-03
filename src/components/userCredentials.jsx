@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   IconButton,
   Button,
@@ -13,7 +14,6 @@ import {
   FormHelperText,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { useState } from "react";
 
 export default function UserCredentials(props) {
   const [email, setEmail] = useState("");
@@ -24,6 +24,8 @@ export default function UserCredentials(props) {
   const [passwordMatchError, setPasswordMatchError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [serverMessage, setServerMessage] = useState([]);
+  const [showServerMessage, setShowServerMessage] = useState(false);
 
   const { open, setOpen, title, action } = props.params;
 
@@ -35,16 +37,20 @@ export default function UserCredentials(props) {
     setEmailError("");
     setPasswordError("");
     setPasswordMatchError("");
+    setServerMessage([]);
+    setShowServerMessage(false);
   };
 
   const handleEmailChange = (value) => {
     setEmail(value);
     setEmailError("");
+    setShowServerMessage(false);
   };
 
   const handlePasswordChange = (value) => {
     setPassword(value);
     setPasswordError("");
+    setShowServerMessage(false);
   };
 
   const handleConfirmPasswordChange = (value) => {
@@ -54,8 +60,14 @@ export default function UserCredentials(props) {
 
   const handleSubmit = () => {
     if (email.length > 0 && password.length > 0 && matchPasswords()) {
-      action(email, password);
-      handleCloseDialog();
+      action(email, password)
+        .then((res) => {
+          handleCloseDialog();
+        })
+        .catch((err) => {
+          setServerMessage(err);
+          setShowServerMessage(true);
+        });
       return;
     }
     setEmailError("Email must not be blank");
@@ -65,15 +77,12 @@ export default function UserCredentials(props) {
 
   const matchPasswords = () => {
     if (title === "Sign In") {
-      console.log("title === Sign In");
       return true;
     }
 
     if (password === confirmPassword) {
-      console.log("password === confirmPassword");
       return true;
     }
-    console.log("No match");
     setPasswordMatchError("Passwords must match");
     return false;
   };
@@ -86,6 +95,18 @@ export default function UserCredentials(props) {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+
+  const serverErrorList = serverMessage
+    .filter((message) => {
+      return !message.description.includes("Username");
+    })
+    .map((message, index) => {
+      return (
+        <FormHelperText key={index} error>
+          {message.description}
+        </FormHelperText>
+      );
+    });
 
   return (
     <Dialog
@@ -179,6 +200,7 @@ export default function UserCredentials(props) {
             </FormHelperText>
           </FormControl>
         )}
+        {showServerMessage && serverErrorList}
       </DialogContent>
       <DialogActions>
         <Button

@@ -1,5 +1,4 @@
 import { IconButton, Typography, Paper } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
 import UserMenu from "./userMenu";
 import { DarkMode, LightMode } from "@mui/icons-material";
 import { useContext } from "react";
