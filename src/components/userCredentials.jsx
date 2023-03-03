@@ -1,16 +1,23 @@
 import {
+  IconButton,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   TextField,
+  InputAdornment,
+  FormControl,
+  InputLabel,
+  FilledInput,
 } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useState } from "react";
 
 export default function UserCredentials(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const { open, setOpen, title, action } = props.params;
 
@@ -31,6 +38,12 @@ export default function UserCredentials(props) {
   const handleSubmit = () => {
     action(email, password);
     handleCloseDialog();
+  };
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
   };
 
   return (
@@ -61,13 +74,42 @@ export default function UserCredentials(props) {
           }}
           sx={{ mb: "1rem" }}
         />
-        <TextField
+        <FormControl variant="filled" fullWidth>
+          <InputLabel>Password</InputLabel>
+          <FilledInput
+            type={showPassword ? "text" : "password"}
+            fullWidth
+            value={password}
+            onChange={(e) => handlePasswordChange(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleSubmit();
+              }
+            }}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+            label="Password"
+          />
+        </FormControl>
+        {/* <TextField
           color="secondary"
           fullWidth
           variant="filled"
           value={password}
           type="password"
           label="Password"
+          inputProps={{
+            
+          }}
           onChange={(e) => handlePasswordChange(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
@@ -75,7 +117,7 @@ export default function UserCredentials(props) {
               handleSubmit();
             }
           }}
-        />
+        /> */}
       </DialogContent>
       <DialogActions>
         <Button
