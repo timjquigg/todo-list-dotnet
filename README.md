@@ -12,22 +12,15 @@ A simple full-stack to-do app to practice React & ASP.NET.
 
 ## Getting Started
 
-1. Clone repository and install node dependencies with `npm install`
+1. Clone repository and install dependencies with `dotnet restore`
 2. Add database connection string to `server/appsettings.json`
-3. From the `server/` directory run `dotnet ef database update` to configure database
-4. Start development server with `npm run dev`
+3. Run `dotnet ef database update` to configure database
+4. Start API server with `dotnet run`
+5. Start React server with `npm start`
 
-The server is configured to host static files in the `server/wwwroot/` directory. The project is configured to place the React build files in that directory. For deployment:
+For deployment:
 
-1. Build the React deployment files with `npm run build`
-2. The app can then be launced with `npm run server`.
+1. Build the React deployment files with `dotnet publish --no-restore -c Release -o [desired output directory]`
+2. The app can then be launced with `dotnet todo-dotnet-api.dll` from the output directory entered in the previous step.
 
-## App Status
-
-In progess
-
-Still to do:
-
-- Configure Dark mode and have ability to switch between light & dark
-- Add user authentication
-- Update database schema to have separate lists for each user
+The server is configured to serve static files from the `wwwroot` directory wihtin the publish folder. The publish script will publish the React files to that directory.
