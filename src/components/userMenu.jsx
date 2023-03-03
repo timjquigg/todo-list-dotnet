@@ -70,9 +70,30 @@ export default function UserMenu(props) {
           "aria-labelledby": "user-button",
         }}
       >
-        {token && <MenuItem onClick={handleSignOut}>Logout</MenuItem>}
-        {!token && <MenuItem onClick={handleSignUp}>Register</MenuItem>}
-        {!token && <MenuItem onClick={handleSignIn}>Login</MenuItem>}
+        {token && (
+          <MenuItem
+            onClick={handleSignOut}
+            sx={{ color: (theme) => theme.palette.secondary.main }}
+          >
+            Logout
+          </MenuItem>
+        )}
+        {!token && (
+          <MenuItem
+            onClick={handleSignUp}
+            sx={{ color: (theme) => theme.palette.secondary.main }}
+          >
+            Register
+          </MenuItem>
+        )}
+        {!token && (
+          <MenuItem
+            onClick={handleSignIn}
+            sx={{ color: (theme) => theme.palette.secondary.main }}
+          >
+            Login
+          </MenuItem>
+        )}
       </Menu>
       <UserCredentials params={dialogOpen} />
     </>
