@@ -10,6 +10,7 @@ import {
   FormControl,
   InputLabel,
   FilledInput,
+  FormHelperText,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useState } from "react";
@@ -17,30 +18,70 @@ import { useState } from "react";
 export default function UserCredentials(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [passwordMatchError, setPasswordMatchError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   const { open, setOpen, title, action } = props.params;
 
   const handleCloseDialog = () => {
-    setOpen({ setOpen: null, open: false, title: "", action: null });
+    setOpen({ ...open, open: false });
     setEmail("");
     setPassword("");
+    setConfirmPassword("");
+    setEmailError("");
+    setPasswordError("");
+    setPasswordMatchError("");
   };
 
   const handleEmailChange = (value) => {
     setEmail(value);
+    setEmailError("");
   };
 
   const handlePasswordChange = (value) => {
     setPassword(value);
+    setPasswordError("");
+  };
+
+  const handleConfirmPasswordChange = (value) => {
+    setConfirmPassword(value);
+    setPasswordMatchError("");
   };
 
   const handleSubmit = () => {
-    action(email, password);
-    handleCloseDialog();
+    if (email.length > 0 && password.length > 0 && matchPasswords()) {
+      action(email, password);
+      handleCloseDialog();
+      return;
+    }
+    setEmailError("Email must not be blank");
+    setPasswordError("Password must not be blank");
+    return;
+  };
+
+  const matchPasswords = () => {
+    if (title === "Sign In") {
+      console.log("title === Sign In");
+      return true;
+    }
+
+    if (password === confirmPassword) {
+      console.log("password === confirmPassword");
+      return true;
+    }
+    console.log("No match");
+    setPasswordMatchError("Passwords must match");
+    return false;
   };
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleClickShowConfirmPassword = () =>
+    setShowConfirmPassword((show) => !show);
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
@@ -61,6 +102,8 @@ export default function UserCredentials(props) {
           color="secondary"
           autoFocus
           fullWidth
+          error={emailError.length > 0}
+          helperText={email.length === 0 && emailError}
           variant="filled"
           value={email}
           type="email"
@@ -80,6 +123,7 @@ export default function UserCredentials(props) {
             type={showPassword ? "text" : "password"}
             fullWidth
             value={password}
+            error={password.length === 0}
             onChange={(e) => handlePasswordChange(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
@@ -99,7 +143,42 @@ export default function UserCredentials(props) {
             }
             label="Password"
           />
+          <FormHelperText error={passwordError.length > 0}>
+            {password.length === 0 && passwordError}
+          </FormHelperText>
         </FormControl>
+        {title === "Sign Up" && (
+          <FormControl variant="filled" fullWidth sx={{ mt: "1rem" }}>
+            <InputLabel>Confirm Password</InputLabel>
+            <FilledInput
+              type={showConfirmPassword ? "text" : "password"}
+              fullWidth
+              error={passwordMatchError.length > 0}
+              value={confirmPassword}
+              onChange={(e) => handleConfirmPasswordChange(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  handleSubmit();
+                }
+              }}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={handleClickShowConfirmPassword}
+                    onMouseDown={handleMouseDownPassword}
+                  >
+                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+              label="Password"
+            />
+            <FormHelperText error={passwordMatchError.length > 0}>
+              {passwordMatchError}
+            </FormHelperText>
+          </FormControl>
+        )}
       </DialogContent>
       <DialogActions>
         <Button
