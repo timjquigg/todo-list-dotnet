@@ -32,7 +32,10 @@ export default function TodoList(props) {
 
     completedTodoList = todos
       .filter((todo) => todo.isComplete)
-      .sort((left, right) => left.id - right.id)
+      .sort(
+        (left, right) =>
+          new Date(right.dateCompleted) - new Date(left.dateCompleted)
+      )
       .map((todo, index) => {
         return <TodoListItem todo={todo} key={index} />;
       });

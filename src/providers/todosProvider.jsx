@@ -18,6 +18,7 @@ export default function TodosProvider(props) {
     axios
       .get("/api/TodoItems")
       .then((res) => {
+        console.log(res.data);
         setTodos(res.data);
       })
       .catch((err) => {});
