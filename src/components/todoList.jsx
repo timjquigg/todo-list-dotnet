@@ -7,7 +7,6 @@ import {
   TableRow,
   TableCell,
   TableHead,
-  Snackbar,
   Tooltip,
 } from "@mui/material";
 import { Add } from "@mui/icons-material";
@@ -20,7 +19,6 @@ import FeedbackMessage from "./feedbackMessage";
 export default function TodoList(props) {
   const { todos } = useContext(todosContext);
   const [open, setOpen] = useState(false);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   let incompleteTodoList = [];
   let completedTodoList = [];
