@@ -100,24 +100,6 @@ export default function UserCredentials(props) {
             label="Password"
           />
         </FormControl>
-        {/* <TextField
-          color="secondary"
-          fullWidth
-          variant="filled"
-          value={password}
-          type="password"
-          label="Password"
-          inputProps={{
-            
-          }}
-          onChange={(e) => handlePasswordChange(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              e.preventDefault();
-              handleSubmit();
-            }
-          }}
-        /> */}
       </DialogContent>
       <DialogActions>
         <Button
