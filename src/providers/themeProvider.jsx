@@ -18,10 +18,11 @@ export default function ColorModeProvider(props) {
       mode,
       ...(mode === "light" && {
         primary: {
-          main: "#658EA9",
+          main: "#537C97",
         },
         secondary: {
-          main: "#E98973",
+          main: "#A35F50",
+          dark: "#A35F50",
         },
         background: {
           default: "#88B2CC",
@@ -30,11 +31,11 @@ export default function ColorModeProvider(props) {
       }),
       ...(mode === "dark" && {
         primary: {
-          main: "#F2F1E8",
+          main: "#FFF",
         },
         secondary: {
-          main: "#E34234",
-          dark: "#E34234",
+          main: "#F2F1E8",
+          dark: "#F2F1E8",
         },
         background: {
           default: "#050533",

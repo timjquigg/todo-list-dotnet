@@ -75,7 +75,7 @@ export default function TodoListItem(props) {
             color="secondary.dark"
             sx={{ textDecoration: isComplete ? "line-through" : "" }}
           >
-            {description}
+            • {description}
           </Typography>
         </TableCell>
         {isComplete && (
@@ -103,22 +103,28 @@ export default function TodoListItem(props) {
                   size="small"
                   sx={{
                     display: isComplete && "none",
-                    color: (theme) => theme.palette.secondary.main,
+                    color: (theme) => theme.palette.secondary.dark,
                   }}
                 />
               </IconButton>
             </Tooltip>
             <Tooltip title="Delete">
               <IconButton size="string" onClick={handleDelete}>
-                <Delete color="secondary" />
+                <Delete
+                  sx={{ color: (theme) => theme.palette.secondary.dark }}
+                />
               </IconButton>
             </Tooltip>
             <Tooltip title={isComplete ? "Mark Incomplete" : "Mark Complete"}>
               <IconButton onClick={handleComplete}>
                 {isComplete ? (
-                  <CheckBoxOutlined color="secondary" />
+                  <CheckBoxOutlined
+                    sx={{ color: (theme) => theme.palette.secondary.dark }}
+                  />
                 ) : (
-                  <CheckBoxOutlineBlankOutlined color="secondary" />
+                  <CheckBoxOutlineBlankOutlined
+                    sx={{ color: (theme) => theme.palette.secondary.dark }}
+                  />
                 )}
               </IconButton>
             </Tooltip>
