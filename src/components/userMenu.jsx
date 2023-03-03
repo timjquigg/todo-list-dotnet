@@ -1,5 +1,5 @@
 import MenuIcon from "@mui/icons-material/Menu";
-import { IconButton, Fab, Menu, MenuItem, Dialog } from "@mui/material";
+import { IconButton, Menu, MenuItem } from "@mui/material";
 import { useContext, useState } from "react";
 import { userContext } from "../providers/userProvider";
 import UserCredentials from "./userCredentials";

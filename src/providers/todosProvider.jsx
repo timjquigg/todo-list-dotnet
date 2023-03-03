@@ -1,11 +1,4 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { userContext } from "./userProvider";
 
@@ -57,7 +50,7 @@ export default function TodosProvider(props) {
   };
 
   const deleteTodo = async (id) => {
-    const res = await axios.delete(`/api/TodoItems/${id}`);
+    await axios.delete(`/api/TodoItems/${id}`);
     setTodos((prev) => {
       const newTodos = prev.filter((el) => el.id !== id);
       return newTodos;

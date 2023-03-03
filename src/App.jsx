@@ -1,4 +1,4 @@
-import { Button, Paper } from "@mui/material";
+import { Paper } from "@mui/material";
 import { Container } from "@mui/system";
 import { useContext } from "react";
 import Banner from "./components/banner";
@@ -7,7 +7,7 @@ import TodoList from "./components/todoList";
 import useWindowDimensions from "./hooks/useWindowDimensions";
 import SnackbarProvider from "./providers/snackbarProvider";
 import TodosProvider from "./providers/todosProvider";
-import UserProvider, { userContext } from "./providers/userProvider";
+import { userContext } from "./providers/userProvider";
 
 function App() {
   const { bodyHeight } = useWindowDimensions();
