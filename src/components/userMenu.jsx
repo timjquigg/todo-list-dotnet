@@ -4,11 +4,6 @@ import { useContext, useState } from "react";
 import { userContext } from "../providers/userProvider";
 import UserCredentials from "./userCredentials";
 
-const fabStyles = {
-  ml: "1rem",
-  backgroundColor: (theme) => theme.palette.background.paper,
-};
-
 export default function UserMenu(props) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -63,7 +58,7 @@ export default function UserMenu(props) {
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
         size="small"
-        sx={fabStyles}
+        sx={{ ml: "1rem" }}
       >
         <MenuIcon />
       </IconButton>

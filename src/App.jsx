@@ -1,3 +1,4 @@
+// import { useTheme } from "@emotion/react";
 import { Paper } from "@mui/material";
 import { Container } from "@mui/system";
 import { useContext } from "react";
@@ -11,7 +12,6 @@ import { userContext } from "./providers/userProvider";
 
 function App() {
   const { bodyHeight } = useWindowDimensions();
-
   const { token } = useContext(userContext);
 
   return (

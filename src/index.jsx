@@ -1,21 +1,22 @@
-import { CssBaseline, ThemeProvider } from "@mui/material";
+import { CssBaseline } from "@mui/material";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import theme from "./providers/theme";
 import UserProvider from "./providers/userProvider";
+import ColorModeProvider from "./providers/themeProvider";
+// import ColorMode
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   // <React.StrictMode>
   <>
-    <UserProvider>
-      <ThemeProvider theme={theme}>
-        <CssBaseline enableColorScheme />
+    <ColorModeProvider>
+      <CssBaseline enableColorScheme />
+      <UserProvider>
         <App />
-      </ThemeProvider>
-    </UserProvider>
+      </UserProvider>
+    </ColorModeProvider>
   </>
   // </React.StrictMode>
 );
