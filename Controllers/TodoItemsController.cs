@@ -33,17 +33,16 @@ namespace todo_dotnet_api.Controllers
 
       string email = HttpContext.User.Claims.Single(p => p.Type.Contains("emailaddress")).Value;
 
-      // var user = await _userManager.FindByEmailAsync(email);
-
-
       if (db.TodoItems == null)
       {
         return NotFound();
       }
 
-      var userItems = db.TodoItems.Where(todo => todo.User.Email == email);
+      var userItems = from todo in db.TodoItems
+                      where todo.User.Email == email
+                      select todo;
 
-      return await db.TodoItems.ToListAsync();
+      return await userItems.ToListAsync();
     }
 
     // GET: api/TodoItems/5
