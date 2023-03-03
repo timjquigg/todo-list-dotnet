@@ -23,16 +23,16 @@ namespace todo_dotnet_api.Controllers
 
     // POST: api/Users
     [HttpPost]
-    public async Task<ActionResult<User>> PostUser(LoginUser user)
+    public async Task<ActionResult<User>> PostUser(LoginUser request)
     {
       if (!ModelState.IsValid)
       {
         return BadRequest(ModelState);
       }
 
-      User newUser = new User() { UserName = user.Email, Email = user.Email };
+      User user = new User() { UserName = request.Email, Email = request.Email };
       var result = await _userManager.CreateAsync(
-        newUser, user.Password
+        user, request.Password
       );
 
       if (!result.Succeeded)
@@ -40,7 +40,16 @@ namespace todo_dotnet_api.Controllers
         return BadRequest(result.Errors);
       }
 
-      var token = _jwtService.CreateToken(newUser);
+      var token = _jwtService.CreateToken(user);
+
+      user.RefreshToken = token.RefreshToken;
+      user.RefreshTokenExpiryTime = token.RefreshTokenExpiryTime;
+
+      await _userManager.UpdateAsync(user);
+
+      Response.Cookies.Append("X-Access-Token", token.AccessToken, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
+      Response.Cookies.Append("X-Email", user.Email, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
+      Response.Cookies.Append("X-Refresh-Token", user.RefreshToken, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
 
       return Ok(token);
     }

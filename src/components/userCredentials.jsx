@@ -53,6 +53,12 @@ export default function UserCredentials(props) {
           type="email"
           label="E-mail"
           onChange={(e) => handleEmailChange(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleSubmit();
+            }
+          }}
           sx={{ mb: "1rem" }}
         />
         <TextField
@@ -63,6 +69,12 @@ export default function UserCredentials(props) {
           type="password"
           label="Password"
           onChange={(e) => handlePasswordChange(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleSubmit();
+            }
+          }}
         />
       </DialogContent>
       <DialogActions>

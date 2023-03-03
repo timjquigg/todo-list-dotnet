@@ -54,6 +54,12 @@ export default function EditTodo(props) {
           variant="filled"
           value={description}
           onChange={(e) => handleEdit(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleSave();
+            }
+          }}
         />
       </DialogContent>
       <DialogActions>
