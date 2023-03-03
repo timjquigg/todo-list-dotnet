@@ -1,11 +1,13 @@
 import { ThemeProvider } from "@emotion/react";
+import { useMediaQuery } from "@mui/material";
 import { createTheme, responsiveFontSizes } from "@mui/material/styles";
 import { createContext, useMemo, useState } from "react";
 
 export const colorModeContext = createContext();
 
 export default function ColorModeProvider(props) {
-  const [mode, setMode] = useState("light");
+  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
+  const [mode, setMode] = useState(prefersDarkMode ? "dark" : "light");
 
   const colorMode = () => {
     setMode((prev) => (prev === "light" ? "dark" : "light"));
