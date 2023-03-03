@@ -69,7 +69,7 @@ export default function TodoListItem(props) {
   return (
     <>
       <TableRow>
-        <TableCell sx={{ width: isComplete ? 2 / 5 : 2 / 5 }}>
+        <TableCell sx={{ px: 0, width: isComplete ? 7 / 20 : 14 / 20 }}>
           <Typography
             variant="body1"
             color="secondary.dark"
@@ -79,7 +79,7 @@ export default function TodoListItem(props) {
           </Typography>
         </TableCell>
         {isComplete && (
-          <TableCell>
+          <TableCell sx={{ px: 0, width: 7 / 20 }}>
             <Typography
               variant="body1"
               textAlign="center"
@@ -92,16 +92,17 @@ export default function TodoListItem(props) {
             </Typography>
           </TableCell>
         )}
-        <TableCell size="string" sx={{ alignContent: "flex-end" }}>
-          <ButtonGroup>
+        <TableCell
+          size="string"
+          sx={{ px: 0, width: 6 / 20, alignContent: "flex-end" }}
+        >
+          <ButtonGroup sx={{ display: "flex", justifyContent: "flex-end" }}>
             <Tooltip title={!isComplete ? "Edit" : ""}>
               <IconButton onClick={handleOpen} disabled={isComplete} hidden>
                 <Edit
                   sx={{
-                    color: (theme) =>
-                      isComplete
-                        ? theme.palette.background.paper
-                        : theme.palette.secondary.main,
+                    display: isComplete && "none",
+                    color: (theme) => theme.palette.secondary.main,
                   }}
                 />
               </IconButton>

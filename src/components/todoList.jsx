@@ -52,12 +52,12 @@ export default function TodoList(props) {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell sx={{ width: 7 / 10 }}>
+            <TableCell sx={{ width: 14 / 20, px: 0 }}>
               <Typography variant="h6" textAlign="left" color="primary">
                 Description
               </Typography>
             </TableCell>
-            <TableCell sx={{ width: 3 / 10 }}>
+            <TableCell sx={{ width: 6 / 20, px: 0 }}>
               <Typography variant="h6" textAlign="center" color="primary">
                 Actions
               </Typography>
@@ -85,17 +85,17 @@ export default function TodoList(props) {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ width: 2 / 5 }}>
+                <TableCell sx={{ width: 7 / 20, px: 0 }}>
                   <Typography variant="h6" textAlign="left" color="primary">
                     Description
                   </Typography>
                 </TableCell>
-                <TableCell sx={{ width: 3 / 10 }}>
+                <TableCell sx={{ width: 7 / 20, px: 0 }}>
                   <Typography variant="h6" textAlign="center" color="primary">
                     Completed
                   </Typography>
                 </TableCell>
-                <TableCell sx={{ width: 3 / 10 }}>
+                <TableCell sx={{ width: 5 / 20, px: 0 }}>
                   <Typography variant="h6" textAlign="center" color="primary">
                     Actions
                   </Typography>
