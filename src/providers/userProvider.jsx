@@ -94,6 +94,9 @@ export default function UserProvider(props) {
         return Promise.resolve();
       })
       .catch((err) => {
+        if (Array.isArray(err.response.data)) {
+          return Promise.reject(err.response.data);
+        }
         return Promise.reject([{ description: err.response.data }]);
       });
   };

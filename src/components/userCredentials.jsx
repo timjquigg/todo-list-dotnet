@@ -205,14 +205,14 @@ export default function UserCredentials(props) {
                     onClick={handleClickShowOldPassword}
                     onMouseDown={handleMouseDownPassword}
                   >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                    {showOldPassword ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
                 </InputAdornment>
               }
-              label="Password"
+              label="Old Password"
             />
-            <FormHelperText error={passwordError.length > 0}>
-              {password.length === 0 && passwordError}
+            <FormHelperText error={oldPasswordError.length > 0}>
+              {oldPassword.length === 0 && oldPasswordError}
             </FormHelperText>
           </FormControl>
         )}
