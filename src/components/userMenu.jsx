@@ -14,7 +14,8 @@ export default function UserMenu(props) {
     action: null,
   });
 
-  const { token, signUp, signIn, signOut } = useContext(userContext);
+  const { token, signUp, signIn, signOut, updatePassword } =
+    useContext(userContext);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -49,6 +50,16 @@ export default function UserMenu(props) {
     handleClose();
   };
 
+  const handleUpdatePassword = () => {
+    setDialogOpen({
+      setOpen: setDialogOpen,
+      open: true,
+      title: "Update Password",
+      action: updatePassword,
+    });
+    handleClose();
+  };
+
   return (
     <>
       <IconButton
@@ -70,6 +81,14 @@ export default function UserMenu(props) {
           "aria-labelledby": "user-button",
         }}
       >
+        {token && (
+          <MenuItem
+            onClick={handleUpdatePassword}
+            sx={{ color: (theme) => theme.palette.secondary.main }}
+          >
+            Update Password
+          </MenuItem>
+        )}
         {token && (
           <MenuItem
             onClick={handleSignOut}

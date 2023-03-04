@@ -14,7 +14,6 @@ import TodoListItem from "./todoListItem";
 import { useContext, useState } from "react";
 import { todosContext } from "../providers/todosProvider";
 import EditTodo from "./editTodo";
-import FeedbackMessage from "./feedbackMessage";
 
 export default function TodoList(props) {
   const { todos } = useContext(todosContext);
@@ -115,7 +114,7 @@ export default function TodoList(props) {
         setOpen={setOpen}
         todo={{ id: null, description: "", completed: false }}
       />
-      <FeedbackMessage />
+      {/* <FeedbackMessage /> */}
     </Box>
   );
 }

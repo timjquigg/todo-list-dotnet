@@ -92,19 +92,49 @@ namespace todo_dotnet_api.Controllers
       return Ok(token);
     }
 
-    // [HttpDelete("{email}")]
-    // public async Task<IActionResult> DeleteUser(string email)
-    // {
-    //   var user = await _userManager.FindByEmailAsync(email);
-    //   if (user == null)
-    //   {
-    //     return BadRequest("Invalid user");
-    //   }
-    //   await _userManager.DeleteAsync(user);
+    // PUT: api/Users/:email
+    [HttpPut("{email}")]
+    public async Task<IActionResult> UpdateUser(string email, UpdateUser request)
+    {
+      if (!ModelState.IsValid)
+      {
+        return BadRequest("Bad Credentials");
+      }
 
-    //   return NoContent();
-    // }
+      if (email != request.Email)
+      {
+        return BadRequest("Bad Credentials");
+      }
 
+      var user = await _userManager.FindByEmailAsync(email);
+
+      if (user == null)
+      {
+        return BadRequest("Bad credentials");
+      }
+
+      var result = await _userManager.ChangePasswordAsync(user, request.OldPassword, request.NewPassword);
+
+      if (!result.Succeeded)
+      {
+        return BadRequest(result.Errors);
+      }
+
+      var token = _jwtService.CreateToken(user);
+
+      user.RefreshToken = token.RefreshToken;
+      user.RefreshTokenExpiryTime = token.RefreshTokenExpiryTime;
+
+      await _userManager.UpdateAsync(user);
+
+      Response.Cookies.Append("X-Access-Token", token.AccessToken, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
+      Response.Cookies.Append("X-Email", user.Email, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
+      Response.Cookies.Append("X-Refresh-Token", user.RefreshToken, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
+
+      return Ok(token);
+    }
+
+    // GET: api/Users/Refresh
     [HttpGet("Refresh")]
     public async Task<IActionResult> RefreshToken()
     {

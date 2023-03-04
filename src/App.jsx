@@ -6,9 +6,8 @@ import Banner from "./components/banner";
 import Landing from "./components/landing";
 import TodoList from "./components/todoList";
 import useWindowDimensions from "./hooks/useWindowDimensions";
-import SnackbarProvider from "./providers/snackbarProvider";
-import TodosProvider from "./providers/todosProvider";
 import { userContext } from "./providers/userProvider";
+import FeedbackMessage from "./components/feedbackMessage";
 
 function App() {
   const { bodyHeight } = useWindowDimensions();
@@ -25,15 +24,12 @@ function App() {
           elevation={8}
           sx={{ textAlign: "center", minHeight: bodyHeight, my: "2rem" }}
         >
-          <TodosProvider>
-            <SnackbarProvider>
-              <TodoList />
-            </SnackbarProvider>
-          </TodosProvider>
+          <TodoList />
         </Paper>
       ) : (
         <Landing />
       )}
+      <FeedbackMessage />
     </Container>
   );
 }

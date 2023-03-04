@@ -6,7 +6,7 @@ export const userContext = createContext();
 
 export default function UserProvider(props) {
   const [token, setToken] = useState("");
-  // const [errorMessage, setErrorMessage] = useState([]);
+  const [email, setEmail] = useState([]);
 
   useEffect(() => {
     refreshToken();
@@ -18,6 +18,7 @@ export default function UserProvider(props) {
       .then((res) => {
         // setErrorMessage("");
         const decoded = jwt_decode(res.data.accessToken);
+        setEmail(decoded.email);
         setToken(res.data.accessToken);
       })
       .catch((err) => {
@@ -36,6 +37,7 @@ export default function UserProvider(props) {
       .then((res) => {
         // setErrorMessage("");
         const decoded = jwt_decode(res.data.accessToken);
+        setEmail(decoded.email);
         setToken(res.data.accessToken);
         return Promise.resolve();
       })
@@ -55,6 +57,7 @@ export default function UserProvider(props) {
       .then((res) => {
         // setErrorMessage("");
         const decoded = jwt_decode(res.data.accessToken);
+        setEmail(decoded.email);
         setToken(res.data.accessToken);
         return Promise.resolve();
       })
@@ -76,12 +79,36 @@ export default function UserProvider(props) {
       });
   };
 
+  const updatePassword = (oldPassword, newPassword) => {
+    const payload = {
+      email,
+      oldPassword,
+      newPassword,
+    };
+
+    return axios
+      .put(`/api/Users/${email}`, payload)
+      .then((res) => {
+        const decoded = jwt_decode(res.data.accessToken);
+        setToken(res.data.accessToken);
+        return Promise.resolve();
+      })
+      .catch((err) => {
+        if (Array.isArray(err.response.data)) {
+          return Promise.reject(err.response.data);
+        }
+        return Promise.reject([{ description: err.response.data }]);
+      });
+  };
+
   const providerData = {
     token,
     // errorMessage,
     signUp,
     signIn,
     signOut,
+    updatePassword,
+    email,
   };
 
   return (

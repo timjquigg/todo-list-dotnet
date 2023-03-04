@@ -5,7 +5,8 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import UserProvider from "./providers/userProvider";
 import ColorModeProvider from "./providers/themeProvider";
-// import ColorMode
+import SnackbarProvider from "./providers/snackbarProvider";
+import TodosProvider from "./providers/todosProvider";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -14,7 +15,11 @@ root.render(
     <ColorModeProvider>
       <CssBaseline enableColorScheme />
       <UserProvider>
-        <App />
+        <TodosProvider>
+          <SnackbarProvider>
+            <App />
+          </SnackbarProvider>
+        </TodosProvider>
       </UserProvider>
     </ColorModeProvider>
   </>
