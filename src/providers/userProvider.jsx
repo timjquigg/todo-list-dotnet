@@ -24,6 +24,8 @@ export default function UserProvider(props) {
       })
       .catch((err) => {
         setLoading(false);
+        setToken("");
+        setEmail("");
         // setErrorMessage(err.response.data);
       });
   };
