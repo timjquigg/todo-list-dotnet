@@ -28,6 +28,9 @@ export default function ColorModeProvider(props) {
           default: "#88B2CC",
           paper: "#E7D4C0",
         },
+        info: {
+          main: "#E7D4C0",
+        },
       }),
       ...(mode === "dark" && {
         primary: {
@@ -57,10 +60,22 @@ export default function ColorModeProvider(props) {
           placement: "top",
         },
       },
-      MuiPaper: {
+      MuiButton: {
         styleOverrides: {
           root: {
-            // backgroundImage: "none",
+            ":hover": {
+              backgroundColor: mode === "light" ? "#d9c7b4" : "#118fbd",
+            },
+          },
+        },
+      },
+      MuiIconButton: {
+        styleOverrides: {
+          root: {
+            "&:hover": {
+              backgroundColor: mode === "light" ? "#d9c7b4" : "#118fbd",
+            },
+            // borderRadius: 0,
           },
         },
       },
