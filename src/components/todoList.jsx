@@ -36,7 +36,7 @@ export default function TodoList(props) {
           new Date(right.dateCompleted) - new Date(left.dateCompleted)
       )
       .map((todo, index) => {
-        return <TodoListItem todo={todo} key={index} />;
+        return <TodoListItem todo={todo} key={todo.dateCompleted} />;
       });
   }
 
