@@ -7,7 +7,8 @@ export const todosContext = createContext();
 export default function TodosProvider(props) {
   const [todos, setTodos] = useState([]);
 
-  const { token } = useContext(userContext);
+  const { token, setToken, email, setEmail, setLoading } =
+    useContext(userContext);
 
   // const getAllTodos = useCallback(async () => {
   //   const res = await axios.get(`/api/TodoItems`);
@@ -19,8 +20,13 @@ export default function TodosProvider(props) {
       .get("/api/TodoItems")
       .then((res) => {
         setTodos(res.data);
+        setLoading(false);
       })
-      .catch((err) => {});
+      .catch((err) => {
+        setLoading(false);
+        setToken("");
+        setEmail("");
+      });
   };
 
   useEffect(() => {

@@ -11,7 +11,7 @@ import FeedbackMessage from "./components/feedbackMessage";
 
 function App() {
   const { bodyHeight } = useWindowDimensions();
-  const { token } = useContext(userContext);
+  const { token, loading } = useContext(userContext);
 
   return (
     <Container
@@ -19,16 +19,17 @@ function App() {
       sx={{ mx: "auto", my: "auto", width: "600px", maxWidth: "100%" }}
     >
       <Banner />
-      {token ? (
-        <Paper
-          elevation={8}
-          sx={{ textAlign: "center", minHeight: bodyHeight, my: "2rem" }}
-        >
-          <TodoList />
-        </Paper>
-      ) : (
-        <Landing />
-      )}
+      {!loading &&
+        (token ? (
+          <Paper
+            elevation={8}
+            sx={{ textAlign: "center", minHeight: bodyHeight, my: "2rem" }}
+          >
+            <TodoList />
+          </Paper>
+        ) : (
+          <Landing />
+        ))}
       <FeedbackMessage />
     </Container>
   );
