@@ -41,29 +41,37 @@ export default function TodoListItem(props) {
       id,
       description,
       isComplete: !isComplete,
-    });
-
-    setSnackPack((prev) => [
-      ...prev,
-      {
-        message: `${description} \
-         ${!isComplete ? "Marked Complete" : "Marked Incomplete"}`,
-        key: new Date().getTime(),
-      },
-    ]);
+    })
+      .then((res) => {
+        setSnackPack((prev) => [
+          ...prev,
+          {
+            message: `${description} \
+           ${!isComplete ? "Marked Complete" : "Marked Incomplete"}`,
+            key: new Date().getTime(),
+          },
+        ]);
+      })
+      .catch((err) => {
+        //
+      });
   };
 
   const handleDelete = () => {
-    deleteTodo(id);
-    // setSnackbarOpen(true);
-    setSnackPack((prev) => [
-      ...prev,
-      {
-        message: `${description} - Deleted`,
-        key: new Date().getTime(),
-        todo: { id, description, isComplete, dateCompleted },
-      },
-    ]);
+    deleteTodo(id)
+      .then((res) => {
+        setSnackPack((prev) => [
+          ...prev,
+          {
+            message: `${description} - Deleted`,
+            key: new Date().getTime(),
+            todo: { id, description, isComplete, dateCompleted },
+          },
+        ]);
+      })
+      .catch((err) => {
+        //
+      });
   };
 
   return (

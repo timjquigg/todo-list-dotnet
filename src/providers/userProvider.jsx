@@ -6,7 +6,8 @@ export const userContext = createContext();
 
 export default function UserProvider(props) {
   const [token, setToken] = useState("");
-  const [email, setEmail] = useState([]);
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     refreshToken();
@@ -16,13 +17,13 @@ export default function UserProvider(props) {
     axios
       .get("/api/Users/Refresh")
       .then((res) => {
-        // setErrorMessage("");
+        setLoading(false);
         const decoded = jwt_decode(res.data.accessToken);
         setEmail(decoded.email);
         setToken(res.data.accessToken);
       })
       .catch((err) => {
-        // console.log(err);
+        setLoading(false);
         // setErrorMessage(err.response.data);
       });
   };
@@ -103,12 +104,15 @@ export default function UserProvider(props) {
 
   const providerData = {
     token,
-    // errorMessage,
+    setToken,
     signUp,
     signIn,
     signOut,
     updatePassword,
     email,
+    setEmail,
+    loading,
+    setLoading,
   };
 
   return (
