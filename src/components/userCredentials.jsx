@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   IconButton,
   Button,
@@ -14,18 +14,24 @@ import {
   FormHelperText,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { snackbarContext } from "../providers/snackbarProvider";
 
 export default function UserCredentials(props) {
   const [email, setEmail] = useState("");
+  const [oldPassword, setOldPassword] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showOldPassword, setShowOldPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [passwordMatchError, setPasswordMatchError] = useState("");
   const [emailError, setEmailError] = useState("");
+  const [oldPasswordError, setOldPasswordError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [serverMessage, setServerMessage] = useState([]);
   const [showServerMessage, setShowServerMessage] = useState(false);
+
+  const { setSnackPack } = useContext(snackbarContext);
 
   const { open, setOpen, title, action } = props.params;
 
@@ -39,11 +45,20 @@ export default function UserCredentials(props) {
     setPasswordMatchError("");
     setServerMessage([]);
     setShowServerMessage(false);
+    setOldPassword("");
+    setOldPasswordError("");
+    setShowOldPassword(false);
   };
 
   const handleEmailChange = (value) => {
     setEmail(value);
     setEmailError("");
+    setShowServerMessage(false);
+  };
+
+  const handleOldPasswordChange = (value) => {
+    setOldPassword(value);
+    setOldPasswordError("");
     setShowServerMessage(false);
   };
 
@@ -56,6 +71,28 @@ export default function UserCredentials(props) {
   const handleConfirmPasswordChange = (value) => {
     setConfirmPassword(value);
     setPasswordMatchError("");
+  };
+
+  const handleSubmitUpdatePassword = () => {
+    if (oldPassword.length > 0 && password.length > 0 && matchPasswords()) {
+      action(oldPassword, password)
+        .then((res) => {
+          handleCloseDialog();
+          setSnackPack((prev) => [
+            ...prev,
+            {
+              message: "Password updated successfully",
+              key: new Date().getTime(),
+            },
+          ]);
+        })
+        .catch((err) => {
+          setServerMessage(err);
+          setShowServerMessage(true);
+        });
+    }
+    setOldPasswordError("Old password must not be blank");
+    setPasswordError("New password must not be blank");
   };
 
   const handleSubmit = () => {
@@ -72,6 +109,7 @@ export default function UserCredentials(props) {
     }
     setEmailError("Email must not be blank");
     setPasswordError("Password must not be blank");
+
     return;
   };
 
@@ -88,6 +126,7 @@ export default function UserCredentials(props) {
   };
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowOldPassword = () => setShowOldPassword((show) => !show);
 
   const handleClickShowConfirmPassword = () =>
     setShowConfirmPassword((show) => !show);
@@ -119,27 +158,69 @@ export default function UserCredentials(props) {
         {title}
       </DialogTitle>
       <DialogContent>
-        <TextField
-          color="secondary"
-          autoFocus
-          fullWidth
-          error={emailError.length > 0}
-          helperText={email.length === 0 && emailError}
-          variant="filled"
-          value={email}
-          type="email"
-          label="E-mail"
-          onChange={(e) => handleEmailChange(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              e.preventDefault();
-              handleSubmit();
-            }
-          }}
-          sx={{ mb: "1rem" }}
-        />
+        {title !== "Update Password" && (
+          <TextField
+            color="secondary"
+            autoFocus
+            fullWidth
+            error={emailError.length > 0}
+            helperText={email.length === 0 && emailError}
+            variant="filled"
+            value={email}
+            type="email"
+            label="E-mail"
+            onChange={(e) => handleEmailChange(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                title === "Update Password"
+                  ? handleSubmitUpdatePassword()
+                  : handleSubmit();
+              }
+            }}
+            sx={{ mb: "1rem" }}
+          />
+        )}
+        {title === "Update Password" && (
+          <FormControl variant="filled" fullWidth sx={{ mb: "1rem" }}>
+            <InputLabel>Old Password</InputLabel>
+            <FilledInput
+              type={showOldPassword ? "text" : "password"}
+              fullWidth
+              autoFocus
+              value={oldPassword}
+              error={oldPassword.length === 0}
+              onChange={(e) => handleOldPasswordChange(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  title === "Update Password"
+                    ? handleSubmitUpdatePassword()
+                    : handleSubmit();
+                }
+              }}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={handleClickShowOldPassword}
+                    onMouseDown={handleMouseDownPassword}
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+              label="Password"
+            />
+            <FormHelperText error={passwordError.length > 0}>
+              {password.length === 0 && passwordError}
+            </FormHelperText>
+          </FormControl>
+        )}
+
         <FormControl variant="filled" fullWidth>
-          <InputLabel>Password</InputLabel>
+          <InputLabel>
+            {title === "Update Password" ? "New Password" : "Password"}
+          </InputLabel>
           <FilledInput
             type={showPassword ? "text" : "password"}
             fullWidth
@@ -149,7 +230,9 @@ export default function UserCredentials(props) {
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 e.preventDefault();
-                handleSubmit();
+                title === "Update Password"
+                  ? handleSubmitUpdatePassword()
+                  : handleSubmit();
               }
             }}
             endAdornment={
@@ -168,38 +251,44 @@ export default function UserCredentials(props) {
             {password.length === 0 && passwordError}
           </FormHelperText>
         </FormControl>
-        {title === "Sign Up" && (
-          <FormControl variant="filled" fullWidth sx={{ mt: "1rem" }}>
-            <InputLabel>Confirm Password</InputLabel>
-            <FilledInput
-              type={showConfirmPassword ? "text" : "password"}
-              fullWidth
-              error={passwordMatchError.length > 0}
-              value={confirmPassword}
-              onChange={(e) => handleConfirmPasswordChange(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  handleSubmit();
+        {title === "Sign Up" ||
+          (title === "Update Password" && (
+            <FormControl variant="filled" fullWidth sx={{ mt: "1rem" }}>
+              <InputLabel>
+                Confirm{" "}
+                {title === "Update Password" ? "New Password" : "Password"}
+              </InputLabel>
+              <FilledInput
+                type={showConfirmPassword ? "text" : "password"}
+                fullWidth
+                error={passwordMatchError.length > 0}
+                value={confirmPassword}
+                onChange={(e) => handleConfirmPasswordChange(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    title === "Update Password"
+                      ? handleSubmitUpdatePassword()
+                      : handleSubmit();
+                  }
+                }}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={handleClickShowConfirmPassword}
+                      onMouseDown={handleMouseDownPassword}
+                    >
+                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
                 }
-              }}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={handleClickShowConfirmPassword}
-                    onMouseDown={handleMouseDownPassword}
-                  >
-                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
-              label="Password"
-            />
-            <FormHelperText error={passwordMatchError.length > 0}>
-              {passwordMatchError}
-            </FormHelperText>
-          </FormControl>
-        )}
+                label="Password"
+              />
+              <FormHelperText error={passwordMatchError.length > 0}>
+                {passwordMatchError}
+              </FormHelperText>
+            </FormControl>
+          ))}
         {showServerMessage && serverErrorList}
       </DialogContent>
       <DialogActions>
@@ -210,7 +299,11 @@ export default function UserCredentials(props) {
           Cancel
         </Button>
         <Button
-          onClick={handleSubmit}
+          onClick={
+            title === "Update Password"
+              ? handleSubmitUpdatePassword
+              : handleSubmit
+          }
           sx={{ color: (theme) => theme.palette.secondary.main }}
         >
           Submit

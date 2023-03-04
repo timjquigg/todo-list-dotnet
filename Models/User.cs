@@ -22,4 +22,24 @@ namespace TodoApi.Models
     [Display(Name = "Password")]
     public string? Password { get; set; }
   }
+
+  public class UpdateUser
+  {
+    [Required(ErrorMessage = "Email is required")]
+    [Display(Name = "Email")]
+    [DataType(DataType.EmailAddress)]
+    public string? Email { get; set; }
+
+    [Required(ErrorMessage = "Old password is required")]
+    [DataType(DataType.Password)]
+    [Display(Name = "Old Password")]
+    public string? OldPassword { get; set; }
+
+    [Required(ErrorMessage = "New password is required")]
+    [DataType(DataType.Password)]
+    [Display(Name = "New Password")]
+    public string? NewPassword { get; set; }
+
+
+  }
 }

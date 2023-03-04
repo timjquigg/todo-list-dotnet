@@ -45,7 +45,7 @@ namespace todo_dotnet_api.Controllers
       return await userItems.ToListAsync();
     }
 
-    // GET: api/TodoItems/5
+    // GET: api/TodoItems/:id
     [HttpGet("{id}")]
     public async Task<ActionResult<TodoItem>> GetTodoItem(long id)
     {
@@ -63,7 +63,7 @@ namespace todo_dotnet_api.Controllers
       return todoItem;
     }
 
-    // PUT: api/TodoItems/5
+    // PUT: api/TodoItems/:id
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id}")]
     public async Task<ActionResult<TodoItem>> PutTodoItem(long id, TodoItem todoItem)
