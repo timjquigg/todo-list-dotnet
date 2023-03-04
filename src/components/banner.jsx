@@ -26,21 +26,15 @@ export default function Banner(props) {
       <Typography color="primary" variant="h2" sx={{ my: "auto", p: "0" }}>
         To-do List
       </Typography>
-      <IconButton size="small" onClick={colorMode}>
-        {theme.palette.mode === "dark" ? (
-          <LightMode
-            sx={{
-              mr: "1rem",
-            }}
-          />
-        ) : (
-          <DarkMode
-            sx={{
-              mr: "1rem",
-            }}
-          />
-        )}
-        {/* <MenuIcon /> */}
+      <IconButton
+        size="small"
+        onClick={colorMode}
+        sx={{
+          mr: "1rem",
+          my: "auto",
+        }}
+      >
+        {theme.palette.mode === "dark" ? <LightMode /> : <DarkMode />}
       </IconButton>
     </Paper>
   );

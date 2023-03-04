@@ -58,7 +58,7 @@ export default function UserMenu(props) {
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
         size="small"
-        sx={{ ml: "1rem" }}
+        sx={{ ml: "1rem", my: "auto" }}
       >
         <MenuIcon />
       </IconButton>
