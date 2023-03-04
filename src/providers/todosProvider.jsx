@@ -30,31 +30,52 @@ export default function TodosProvider(props) {
   }, [token]);
 
   const createTodo = async (todo) => {
-    const res = await axios.post("/api/TodoItems", todo);
-    setTodos((prev) => {
-      const newTodos = [...prev];
-      newTodos.push(res.data);
-      return newTodos;
-    });
+    return axios
+      .post("/api/TodoItems", todo)
+      .then((res) => {
+        setTodos((prev) => {
+          const newTodos = [...prev];
+          newTodos.push(res.data);
+          return newTodos;
+        });
+        return Promise.resolve();
+      })
+      .catch((err) => {
+        return Promise.reject(err);
+      });
   };
 
   const updateTodo = async ({ id, description, isComplete }) => {
     const todo = { id, description, isComplete };
-    const res = await axios.put(`/api/TodoItems/${todo.id}`, todo);
-    setTodos((prev) => {
-      const newTodos = [...prev];
-      const index = newTodos.findIndex((todo) => todo.id === id);
-      newTodos[index] = res.data;
-      return newTodos;
-    });
+    return axios
+      .put(`/api/TodoItems/${todo.id}`, todo)
+      .then((res) => {
+        setTodos((prev) => {
+          const newTodos = [...prev];
+          const index = newTodos.findIndex((todo) => todo.id === id);
+          newTodos[index] = res.data;
+          return newTodos;
+        });
+        return Promise.resolve();
+      })
+      .catch((err) => {
+        return Promise.reject(err);
+      });
   };
 
   const deleteTodo = async (id) => {
-    await axios.delete(`/api/TodoItems/${id}`);
-    setTodos((prev) => {
-      const newTodos = prev.filter((el) => el.id !== id);
-      return newTodos;
-    });
+    return axios
+      .delete(`/api/TodoItems/${id}`)
+      .then((res) => {
+        setTodos((prev) => {
+          const newTodos = prev.filter((el) => el.id !== id);
+          return newTodos;
+        });
+        return Promise.resolve();
+      })
+      .catch((err) => {
+        return Promise.reject(err);
+      });
   };
 
   const resetTodos = () => {

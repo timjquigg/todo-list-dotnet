@@ -8,12 +8,15 @@ import {
   Button,
 } from "@mui/material";
 import { todosContext } from "../providers/todosProvider";
+import { snackbarContext } from "../providers/snackbarProvider";
 
 export default function EditTodo(props) {
   const { open, setOpen, todo } = props;
   const [description, setDescription] = useState(todo.description ?? "");
+  const [errorMessage, setErrorMessage] = useState("");
   const elementId = `editTodo${todo.id ?? ""}`;
   const { updateTodo, createTodo } = useContext(todosContext);
+  const { setSnackPack } = useContext(snackbarContext);
 
   const handleClose = () => {
     setDescription(todo.description ?? "");
@@ -22,6 +25,7 @@ export default function EditTodo(props) {
 
   const handleEdit = (value) => {
     setDescription(value);
+    setErrorMessage("");
   };
 
   const handleCancel = () => {
@@ -30,13 +34,44 @@ export default function EditTodo(props) {
   };
 
   const handleSave = () => {
-    handleClose();
-    if (todo.id) {
-      updateTodo({ description, id: todo.id, isComplete: todo.isComplete });
+    if (description.length === 0) {
+      setErrorMessage("Description is required");
       return;
     }
-    createTodo({ description, isComplete: todo.isComplete });
-    setDescription(todo.description ?? "");
+
+    if (todo.id) {
+      updateTodo({ description, id: todo.id, isComplete: todo.isComplete })
+        .then((res) => {
+          handleClose();
+          setSnackPack((prev) => [
+            ...prev,
+            {
+              message: `${description} updated successfully.`,
+              key: new Date().getTime(),
+            },
+          ]);
+        })
+        .catch((err) => {
+          //
+        });
+      return;
+    }
+
+    createTodo({ description, isComplete: todo.isComplete })
+      .then((res) => {
+        handleClose();
+        setSnackPack((prev) => [
+          ...prev,
+          {
+            message: `${description} created successfully.`,
+            key: new Date().getTime(),
+          },
+        ]);
+        setDescription(todo.description ?? "");
+      })
+      .catch((err) => {
+        //
+      });
   };
 
   return (
@@ -51,6 +86,8 @@ export default function EditTodo(props) {
           autoFocus
           multiline
           fullWidth
+          error={errorMessage.length > 0}
+          helperText={errorMessage}
           variant="filled"
           value={description}
           onChange={(e) => handleEdit(e.target.value)}
