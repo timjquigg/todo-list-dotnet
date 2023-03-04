@@ -47,9 +47,9 @@ export default function TodosProvider(props) {
         return Promise.resolve();
       })
       .catch((err) => {
-        setToken("");
-        setEmail("");
-        setLoading(false);
+        // setToken("");
+        // setEmail("");
+        // setLoading(false);
         return Promise.reject(err);
       });
   };
@@ -68,9 +68,9 @@ export default function TodosProvider(props) {
         return Promise.resolve();
       })
       .catch((err) => {
-        setToken("");
-        setEmail("");
-        setLoading(false);
+        // setToken("");
+        // setEmail("");
+        // setLoading(false);
         return Promise.reject(err);
       });
   };
@@ -86,9 +86,9 @@ export default function TodosProvider(props) {
         return Promise.resolve();
       })
       .catch((err) => {
-        setToken("");
-        setEmail("");
-        setLoading(false);
+        // setToken("");
+        // setEmail("");
+        // setLoading(false);
         return Promise.reject(err);
       });
   };
